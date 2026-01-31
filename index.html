@@ -15,6 +15,7 @@
             --accent-green: #00ff88;
             --accent-blue: #00d4ff;
             --accent-purple: #a855f7;
+            --accent-yellow: #ffd700;
             --text-primary: #ffffff;
             --text-secondary: #888888;
             --text-muted: #555555;
@@ -35,7 +36,6 @@
             overflow-x: hidden;
         }
 
-        /* Noise texture overlay */
         body::before {
             content: '';
             position: fixed;
@@ -47,6 +47,23 @@
             opacity: 0.03;
             pointer-events: none;
             z-index: 1000;
+        }
+
+        /* Current Week Banner */
+        .current-week-banner {
+            background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-orange) 100%);
+            padding: 0.75rem 2rem;
+            text-align: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+
+        .current-week-banner strong {
+            font-weight: 700;
         }
 
         /* Hero Section */
@@ -114,6 +131,8 @@
             gap: 3rem;
             margin-top: 3rem;
             animation: fadeInUp 0.8s ease-out 0.3s both;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .stat {
@@ -132,6 +151,11 @@
             letter-spacing: 0.2em;
             color: var(--text-secondary);
             text-transform: uppercase;
+        }
+
+        .stat.current-week .stat-value {
+            color: var(--accent-yellow);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
 
         .scroll-indicator {
@@ -156,21 +180,20 @@
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+            50% { box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0.1); }
         }
 
         /* Navigation */
         .nav {
             position: sticky;
-            top: 0;
-            background: rgba(10, 10, 10, 0.9);
+            top: 44px;
+            background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             z-index: 100;
@@ -186,9 +209,7 @@
             scrollbar-width: none;
         }
 
-        .nav-inner::-webkit-scrollbar {
-            display: none;
-        }
+        .nav-inner::-webkit-scrollbar { display: none; }
 
         .nav-link {
             font-family: 'Space Mono', monospace;
@@ -215,20 +236,8 @@
             padding: 4rem 2rem;
         }
 
-        /* Section Headers */
         .section-header {
             margin-bottom: 3rem;
-        }
-
-        .section-number {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 6rem;
-            line-height: 1;
-            color: var(--bg-card);
-            position: absolute;
-            top: -1rem;
-            left: -1rem;
-            z-index: -1;
         }
 
         .section-title {
@@ -248,9 +257,7 @@
         }
 
         /* Weekly Schedule Grid */
-        .schedule-section {
-            margin-bottom: 6rem;
-        }
+        .schedule-section { margin-bottom: 6rem; }
 
         .week-grid {
             display: grid;
@@ -262,10 +269,11 @@
             overflow: hidden;
         }
 
-        @media (max-width: 900px) {
-            .week-grid {
-                grid-template-columns: 1fr;
-            }
+        @media (max-width: 1000px) {
+            .week-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .week-grid { grid-template-columns: 1fr; }
         }
 
         .day-card {
@@ -275,18 +283,33 @@
             display: flex;
             flex-direction: column;
             transition: all 0.3s ease;
+            position: relative;
         }
 
-        .day-card:hover {
-            background: var(--bg-secondary);
-        }
-
-        .day-card.rest {
-            background: var(--bg-secondary);
-        }
-
+        .day-card:hover { background: var(--bg-secondary); }
+        .day-card.rest { background: var(--bg-secondary); }
         .day-card.highlight {
             background: linear-gradient(135deg, rgba(255, 51, 51, 0.1) 0%, var(--bg-card) 100%);
+        }
+
+        .day-card.today {
+            border: 2px solid var(--accent-yellow);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .day-card.today::before {
+            content: 'TODAY';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent-yellow);
+            color: var(--bg-primary);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
         }
 
         .day-name {
@@ -320,20 +343,21 @@
             background: rgba(0, 255, 136, 0.1);
             border-left: 3px solid var(--accent-green);
         }
-
         .activity.mma {
             background: rgba(255, 107, 53, 0.1);
             border-left: 3px solid var(--accent-orange);
         }
-
         .activity.class {
             background: rgba(255, 51, 51, 0.1);
             border-left: 3px solid var(--accent-red);
         }
-
         .activity.rest {
             background: rgba(136, 136, 136, 0.1);
             border-left: 3px solid var(--text-muted);
+        }
+        .activity.exam {
+            background: rgba(168, 85, 247, 0.15);
+            border-left: 3px solid var(--accent-purple);
         }
 
         .activity-time {
@@ -344,14 +368,10 @@
             margin-bottom: 0.25rem;
         }
 
-        .activity-name {
-            font-weight: 600;
-        }
+        .activity-name { font-weight: 600; }
 
         /* Lifting Program */
-        .lifting-section {
-            margin-bottom: 6rem;
-        }
+        .lifting-section { margin-bottom: 6rem; }
 
         .workout-tabs {
             display: flex;
@@ -385,6 +405,17 @@
             color: var(--bg-primary);
         }
 
+        .workout-tab.full-schedule {
+            background: var(--bg-secondary);
+            border-color: var(--accent-purple);
+            color: var(--accent-purple);
+        }
+
+        .workout-tab.full-schedule.active {
+            background: var(--accent-purple);
+            color: var(--bg-primary);
+        }
+
         .workout-content {
             display: none;
         }
@@ -399,73 +430,205 @@
             to { opacity: 1; }
         }
 
+        .exercise-table-container {
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
         .exercise-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 2rem;
+            min-width: 1000px;
+        }
+
+        .exercise-table th,
+        .exercise-table td {
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.8rem;
+            white-space: nowrap;
         }
 
         .exercise-table th {
             font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            letter-spacing: 0.1em;
+            font-size: 0.65rem;
+            letter-spacing: 0.05em;
             text-transform: uppercase;
             color: var(--text-secondary);
-            text-align: left;
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
+            background: var(--bg-secondary);
+            position: sticky;
+            top: 0;
         }
 
-        .exercise-table td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
-            vertical-align: top;
+        .exercise-table th:first-child,
+        .exercise-table td:first-child {
+            text-align: left;
+            min-width: 130px;
+            font-weight: 600;
+        }
+
+        .exercise-table th:nth-child(2),
+        .exercise-table td:nth-child(2) {
+            min-width: 70px;
+        }
+
+        .exercise-table th:last-child,
+        .exercise-table td:last-child {
+            min-width: 150px;
+            text-align: left;
+            white-space: normal;
         }
 
         .exercise-table tr:hover td {
             background: var(--bg-card);
         }
 
-        .exercise-name {
-            font-weight: 600;
-            font-size: 1rem;
+        .exercise-table .current-week-col {
+            background: rgba(255, 215, 0, 0.15) !important;
+            border-left: 2px solid var(--accent-yellow);
+            border-right: 2px solid var(--accent-yellow);
+        }
+
+        .exercise-table th.current-week-col {
+            background: var(--accent-yellow) !important;
+            color: var(--bg-primary);
+            font-weight: 700;
+        }
+
+        .weight-cell {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
         }
 
         .exercise-sets {
             font-family: 'Space Mono', monospace;
             color: var(--accent-blue);
+            font-size: 0.7rem;
         }
 
-        .weight-progression {
-            display: flex;
-            gap: 0.5rem;
+        /* Full 15-Week Schedule */
+        .full-schedule-container {
+            overflow-x: auto;
         }
 
-        .weight-week {
+        .full-schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            min-width: 900px;
+        }
+
+        .full-schedule-table th {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            padding: 1rem 0.75rem;
+            border-bottom: 2px solid var(--border);
+            text-align: left;
+            background: var(--bg-secondary);
+            position: sticky;
+            top: 0;
+        }
+
+        .full-schedule-table td {
+            padding: 1rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .full-schedule-table tr:hover td {
             background: var(--bg-card);
-            padding: 0.5rem 0.75rem;
+        }
+
+        .full-schedule-table tr.current-week-row {
+            background: rgba(255, 215, 0, 0.08);
+            border-left: 4px solid var(--accent-yellow);
+        }
+
+        .full-schedule-table tr.current-week-row td:first-child {
+            position: relative;
+        }
+
+        .full-schedule-table tr.deload-row {
+            background: rgba(255, 107, 53, 0.08);
+        }
+
+        .full-schedule-table tr.exam-week-row {
+            background: rgba(168, 85, 247, 0.05);
+        }
+
+        .week-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
             border-radius: 4px;
             font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            text-align: center;
-            min-width: 60px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-left: 0.5rem;
         }
 
-        .weight-week span {
+        .week-badge.current {
+            background: var(--accent-yellow);
+            color: var(--bg-primary);
+        }
+
+        .week-badge.deload {
+            background: var(--accent-orange);
+            color: var(--bg-primary);
+        }
+
+        .phase-tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .phase-tag.foundation { background: rgba(0, 255, 136, 0.2); color: var(--accent-green); }
+        .phase-tag.building { background: rgba(0, 212, 255, 0.2); color: var(--accent-blue); }
+        .phase-tag.intensification { background: rgba(255, 107, 53, 0.2); color: var(--accent-orange); }
+        .phase-tag.peak { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
+
+        .exam-item {
             display: block;
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            margin-bottom: 0.25rem;
+            font-size: 0.75rem;
+            padding: 0.4rem 0.6rem;
+            margin: 0.25rem 0;
+            border-radius: 4px;
+            background: rgba(168, 85, 247, 0.15);
+            color: var(--accent-purple);
+            border-left: 3px solid var(--accent-purple);
         }
 
-        /* 15 Week Overview */
-        .phases-section {
-            margin-bottom: 6rem;
+        .exam-item.major {
+            background: rgba(255, 51, 51, 0.15);
+            color: var(--accent-red);
+            border-left-color: var(--accent-red);
+            font-weight: 600;
         }
+
+        .deadline-item {
+            display: block;
+            font-size: 0.75rem;
+            padding: 0.4rem 0.6rem;
+            margin: 0.25rem 0;
+            border-radius: 4px;
+            background: rgba(0, 212, 255, 0.15);
+            color: var(--accent-blue);
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        /* Phases Section */
+        .phases-section { margin-bottom: 6rem; }
 
         .phase-timeline {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
         }
 
@@ -476,6 +639,26 @@
             padding: 2rem;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .phase-card.current-phase {
+            border-color: var(--accent-yellow);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.15);
+        }
+
+        .phase-card.current-phase::after {
+            content: 'CURRENT';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent-yellow);
+            color: var(--bg-primary);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
         }
 
         .phase-card::before {
@@ -487,21 +670,10 @@
             height: 4px;
         }
 
-        .phase-card.foundation::before {
-            background: var(--accent-green);
-        }
-
-        .phase-card.building::before {
-            background: var(--accent-blue);
-        }
-
-        .phase-card.intensification::before {
-            background: var(--accent-orange);
-        }
-
-        .phase-card.peak::before {
-            background: var(--accent-purple);
-        }
+        .phase-card.foundation::before { background: var(--accent-green); }
+        .phase-card.building::before { background: var(--accent-blue); }
+        .phase-card.intensification::before { background: var(--accent-orange); }
+        .phase-card.peak::before { background: var(--accent-purple); }
 
         .phase-weeks {
             font-family: 'Space Mono', monospace;
@@ -543,9 +715,7 @@
         }
 
         /* Main Street Classes */
-        .classes-section {
-            margin-bottom: 6rem;
-        }
+        .classes-section { margin-bottom: 6rem; }
 
         .class-grid {
             display: grid;
@@ -585,9 +755,7 @@
         }
 
         /* Daily Breakdown */
-        .daily-section {
-            margin-bottom: 6rem;
-        }
+        .daily-section { margin-bottom: 6rem; }
 
         .daily-accordion {
             display: flex;
@@ -599,8 +767,10 @@
             overflow: hidden;
         }
 
-        .daily-item {
-            background: var(--bg-card);
+        .daily-item { background: var(--bg-card); }
+
+        .daily-item.today-item {
+            border-left: 4px solid var(--accent-yellow);
         }
 
         .daily-header {
@@ -612,13 +782,24 @@
             transition: all 0.3s ease;
         }
 
-        .daily-header:hover {
-            background: var(--bg-secondary);
-        }
+        .daily-header:hover { background: var(--bg-secondary); }
 
         .daily-day {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .today-badge {
+            background: var(--accent-yellow);
+            color: var(--bg-primary);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
         }
 
         .daily-summary {
@@ -633,9 +814,7 @@
             transition: transform 0.3s ease;
         }
 
-        .daily-item.open .daily-toggle {
-            transform: rotate(45deg);
-        }
+        .daily-item.open .daily-toggle { transform: rotate(45deg); }
 
         .daily-content {
             display: none;
@@ -648,14 +827,8 @@
         }
 
         @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .time-block {
@@ -665,9 +838,7 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .time-block:last-child {
-            border-bottom: none;
-        }
+        .time-block:last-child { border-bottom: none; }
 
         .time-block-time {
             font-family: 'Space Mono', monospace;
@@ -676,28 +847,16 @@
             min-width: 100px;
         }
 
-        .time-block-activity {
-            flex: 1;
-        }
+        .time-block-activity { flex: 1; }
+        .time-block-activity.highlight { color: var(--accent-green); font-weight: 600; }
+        .time-block-activity.mma-highlight { color: var(--accent-orange); font-weight: 600; }
 
-        .time-block-activity.highlight {
-            color: var(--accent-green);
-            font-weight: 600;
-        }
-
-        .time-block-activity.mma-highlight {
-            color: var(--accent-orange);
-            font-weight: 600;
-        }
-
-        /* Nutrition Quick Guide */
-        .nutrition-section {
-            margin-bottom: 6rem;
-        }
+        /* Nutrition */
+        .nutrition-section { margin-bottom: 6rem; }
 
         .nutrition-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
         }
 
@@ -705,13 +864,13 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
         }
 
         .nutrition-value {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 3rem;
+            font-size: 2.5rem;
             background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-blue) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -720,7 +879,7 @@
 
         .nutrition-label {
             font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.1em;
@@ -736,7 +895,7 @@
 
         .footer-quote {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
             max-width: 800px;
             margin: 0 auto 1rem;
         }
@@ -747,14 +906,19 @@
             color: var(--text-muted);
         }
 
-        /* Utility */
-        .mb-1 { margin-bottom: 0.5rem; }
-        .mb-2 { margin-bottom: 1rem; }
-        .mb-3 { margin-bottom: 1.5rem; }
-        .mb-4 { margin-bottom: 2rem; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
     </style>
 </head>
 <body>
+    <!-- Current Week Banner -->
+    <div class="current-week-banner">
+        📅 <strong id="current-week-text">WEEK 1</strong> of 15 • <span id="current-date-text"></span> • <span id="days-remaining-text"></span> days until transformation complete
+    </div>
+
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-label">Spring 2026 Training Program</div>
@@ -767,9 +931,13 @@
                 <div class="stat-value">145→170</div>
                 <div class="stat-label">Pounds</div>
             </div>
+            <div class="stat current-week">
+                <div class="stat-value" id="hero-current-week">1</div>
+                <div class="stat-label">Current Week</div>
+            </div>
             <div class="stat">
                 <div class="stat-value">15</div>
-                <div class="stat-label">Weeks</div>
+                <div class="stat-label">Total Weeks</div>
             </div>
             <div class="stat">
                 <div class="stat-value">5+3</div>
@@ -800,153 +968,11 @@
         <section id="schedule" class="schedule-section">
             <div class="section-header">
                 <h2 class="section-title">Your Week</h2>
-                <p class="section-subtitle">Optimized around your class schedule</p>
+                <p class="section-subtitle">Optimized around your class schedule • Today is highlighted</p>
             </div>
 
-            <div class="week-grid">
-                <!-- Monday -->
-                <div class="day-card">
-                    <div class="day-name">Monday</div>
-                    <div class="day-date">Push + Muay Thai</div>
-                    <div class="day-activities">
-                        <div class="activity gym">
-                            <span class="activity-time">8:00 - 9:30 AM</span>
-                            <span class="activity-name">Push Day (Gym)</span>
-                        </div>
-                        <div class="activity class">
-                            <span class="activity-time">2:30 - 4:00 PM</span>
-                            <span class="activity-name">ACCT 2302</span>
-                        </div>
-                        <div class="activity class">
-                            <span class="activity-time">5:30 - 7:00 PM</span>
-                            <span class="activity-name">SCLT 3384</span>
-                        </div>
-                        <div class="activity mma">
-                            <span class="activity-time">7:30 - 8:30 PM</span>
-                            <span class="activity-name">Muay Thai Pads</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tuesday -->
-                <div class="day-card">
-                    <div class="day-name">Tuesday</div>
-                    <div class="day-date">Pull Day</div>
-                    <div class="day-activities">
-                        <div class="activity gym">
-                            <span class="activity-time">8:00 - 9:30 AM</span>
-                            <span class="activity-name">Pull Day (Gym)</span>
-                        </div>
-                        <div class="activity class">
-                            <span class="activity-time">2:30 - 4:00 PM</span>
-                            <span class="activity-name">TLIM 3340</span>
-                        </div>
-                        <div class="activity class">
-                            <span class="activity-time">5:30 - 7:00 PM</span>
-                            <span class="activity-name">SCLT 3389</span>
-                        </div>
-                        <div class="activity class">
-                            <span class="activity-time">7:00 - 8:30 PM</span>
-                            <span class="activity-name">SCLT 3387</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Wednesday -->
-                <div class="day-card">
-                    <div class="day-name">Wednesday</div>
-                    <div class="day-date">Legs + Muay Thai</div>
-                    <div class="day-activities">
-                        <div class="activity gym">
-                            <span class="activity-time">8:00 - 9:30 AM</span>
-                            <span class="activity-name">Legs Day (Gym)</span>
-                        </div>
-                        <div class="activity class">
-                            <span class="activity-time">2:30 - 4:00 PM</span>
-                            <span class="activity-name">ACCT 2302</span>
-                        </div>
-                        <div class="activity mma">
-                            <span class="activity-time">6:30 - 7:30 PM</span>
-                            <span class="activity-name">Muay Thai All Levels</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Thursday -->
-                <div class="day-card highlight">
-                    <div class="day-name">Thursday</div>
-                    <div class="day-date">Best Day — Double Session</div>
-                    <div class="day-activities">
-                        <div class="activity gym">
-                            <span class="activity-time">10:30 AM - 12:00 PM</span>
-                            <span class="activity-name">Push Day #2 (Gym)</span>
-                        </div>
-                        <div class="activity mma">
-                            <span class="activity-time">5:00 - 6:00 PM</span>
-                            <span class="activity-name">MMA All Levels</span>
-                        </div>
-                        <div class="activity mma">
-                            <span class="activity-time">6:30 - 7:30 PM</span>
-                            <span class="activity-name">Muay Thai All Levels</span>
-                        </div>
-                        <div class="activity mma">
-                            <span class="activity-time">7:30 - 8:30 PM</span>
-                            <span class="activity-name">Muay Thai Pads</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Friday -->
-                <div class="day-card">
-                    <div class="day-name">Friday</div>
-                    <div class="day-date">Pull Day #2</div>
-                    <div class="day-activities">
-                        <div class="activity gym">
-                            <span class="activity-time">8:00 - 9:30 AM</span>
-                            <span class="activity-name">Pull Day #2 (Gym)</span>
-                        </div>
-                        <div class="activity class">
-                            <span class="activity-time">5:30 - 7:00 PM</span>
-                            <span class="activity-name">SCLT 3385</span>
-                        </div>
-                        <div class="activity mma">
-                            <span class="activity-time">7:30 PM (Optional)</span>
-                            <span class="activity-name">Amateur Boxing</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Saturday -->
-                <div class="day-card">
-                    <div class="day-name">Saturday</div>
-                    <div class="day-date">Skill Work</div>
-                    <div class="day-activities">
-                        <div class="activity mma">
-                            <span class="activity-time">11:00 AM - 12:00 PM</span>
-                            <span class="activity-name">Muay Thai Sparring</span>
-                        </div>
-                        <div class="activity rest">
-                            <span class="activity-time">Afternoon</span>
-                            <span class="activity-name">Meal Prep + Recovery</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sunday -->
-                <div class="day-card rest">
-                    <div class="day-name">Sunday</div>
-                    <div class="day-date">Full Rest</div>
-                    <div class="day-activities">
-                        <div class="activity rest">
-                            <span class="activity-time">All Day</span>
-                            <span class="activity-name">REST — You grow while you sleep</span>
-                        </div>
-                        <div class="activity rest">
-                            <span class="activity-time">Afternoon</span>
-                            <span class="activity-name">Weekly Review + Meal Prep</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="week-grid" id="week-grid">
+                <!-- Days will be populated by JavaScript -->
             </div>
         </section>
 
@@ -954,308 +980,42 @@
         <section id="lifting" class="lifting-section">
             <div class="section-header">
                 <h2 class="section-title">Lifting Program</h2>
-                <p class="section-subtitle">Push/Pull/Legs with Progressive Overload</p>
+                <p class="section-subtitle">Push/Pull/Legs with 15-Week Progressive Overload • Current week highlighted</p>
             </div>
 
             <div class="workout-tabs">
                 <button class="workout-tab active" onclick="showWorkout('push')">Push Day</button>
                 <button class="workout-tab" onclick="showWorkout('pull')">Pull Day</button>
                 <button class="workout-tab" onclick="showWorkout('legs')">Legs Day</button>
+                <button class="workout-tab full-schedule" onclick="showWorkout('full-schedule')">📋 Full 15-Week Schedule</button>
             </div>
 
             <!-- Push Day -->
             <div id="push" class="workout-content active">
-                <table class="exercise-table">
-                    <thead>
-                        <tr>
-                            <th>Exercise</th>
-                            <th>Sets × Reps</th>
-                            <th>Progressive Overload (4 weeks)</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="exercise-name">Bench Press</span></td>
-                            <td><span class="exercise-sets">4 × 6-8</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>95</div>
-                                    <div class="weight-week"><span>W2</span>100</div>
-                                    <div class="weight-week"><span>W3</span>105</div>
-                                    <div class="weight-week"><span>W4</span>110</div>
-                                </div>
-                            </td>
-                            <td>Add 5 lbs when you hit 4×8</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Overhead Press</span></td>
-                            <td><span class="exercise-sets">3 × 8-10</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>65</div>
-                                    <div class="weight-week"><span>W2</span>70</div>
-                                    <div class="weight-week"><span>W3</span>75</div>
-                                    <div class="weight-week"><span>W4</span>80</div>
-                                </div>
-                            </td>
-                            <td>Main shoulder builder</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Incline DB Press</span></td>
-                            <td><span class="exercise-sets">3 × 10-12</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>30</div>
-                                    <div class="weight-week"><span>W2</span>35</div>
-                                    <div class="weight-week"><span>W3</span>35</div>
-                                    <div class="weight-week"><span>W4</span>40</div>
-                                </div>
-                            </td>
-                            <td>Focus on stretch at bottom</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Lateral Raises</span></td>
-                            <td><span class="exercise-sets">3 × 12-15</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>15</div>
-                                    <div class="weight-week"><span>W2</span>15</div>
-                                    <div class="weight-week"><span>W3</span>20</div>
-                                    <div class="weight-week"><span>W4</span>20</div>
-                                </div>
-                            </td>
-                            <td>Control the negative</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Tricep Dips</span></td>
-                            <td><span class="exercise-sets">3 × 8-12</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>BW</div>
-                                    <div class="weight-week"><span>W2</span>BW</div>
-                                    <div class="weight-week"><span>W3</span>+10</div>
-                                    <div class="weight-week"><span>W4</span>+10</div>
-                                </div>
-                            </td>
-                            <td>Add weight when 12 reps easy</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Tricep Pushdowns</span></td>
-                            <td><span class="exercise-sets">3 × 12-15</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>40</div>
-                                    <div class="weight-week"><span>W2</span>45</div>
-                                    <div class="weight-week"><span>W3</span>50</div>
-                                    <div class="weight-week"><span>W4</span>55</div>
-                                </div>
-                            </td>
-                            <td>Squeeze at bottom</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="exercise-table-container">
+                    <table class="exercise-table" id="push-table"></table>
+                </div>
             </div>
 
             <!-- Pull Day -->
             <div id="pull" class="workout-content">
-                <table class="exercise-table">
-                    <thead>
-                        <tr>
-                            <th>Exercise</th>
-                            <th>Sets × Reps</th>
-                            <th>Progressive Overload (4 weeks)</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="exercise-name">Deadlift</span></td>
-                            <td><span class="exercise-sets">4 × 5</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>135</div>
-                                    <div class="weight-week"><span>W2</span>145</div>
-                                    <div class="weight-week"><span>W3</span>155</div>
-                                    <div class="weight-week"><span>W4</span>165</div>
-                                </div>
-                            </td>
-                            <td>Add 10 lbs/week</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Barbell Row</span></td>
-                            <td><span class="exercise-sets">4 × 6-8</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>85</div>
-                                    <div class="weight-week"><span>W2</span>90</div>
-                                    <div class="weight-week"><span>W3</span>95</div>
-                                    <div class="weight-week"><span>W4</span>100</div>
-                                </div>
-                            </td>
-                            <td>Squeeze shoulder blades</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Pull-ups</span></td>
-                            <td><span class="exercise-sets">3 × AMRAP</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>BW</div>
-                                    <div class="weight-week"><span>W2</span>BW</div>
-                                    <div class="weight-week"><span>W3</span>BW</div>
-                                    <div class="weight-week"><span>W4</span>BW</div>
-                                </div>
-                            </td>
-                            <td>Track reps, aim to increase</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Lat Pulldown</span></td>
-                            <td><span class="exercise-sets">3 × 10-12</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>90</div>
-                                    <div class="weight-week"><span>W2</span>95</div>
-                                    <div class="weight-week"><span>W3</span>100</div>
-                                    <div class="weight-week"><span>W4</span>105</div>
-                                </div>
-                            </td>
-                            <td>Full stretch at top</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Face Pulls</span></td>
-                            <td><span class="exercise-sets">3 × 15-20</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>30</div>
-                                    <div class="weight-week"><span>W2</span>35</div>
-                                    <div class="weight-week"><span>W3</span>35</div>
-                                    <div class="weight-week"><span>W4</span>40</div>
-                                </div>
-                            </td>
-                            <td>Rear delts + posture</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Barbell Curls</span></td>
-                            <td><span class="exercise-sets">3 × 10-12</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>40</div>
-                                    <div class="weight-week"><span>W2</span>45</div>
-                                    <div class="weight-week"><span>W3</span>45</div>
-                                    <div class="weight-week"><span>W4</span>50</div>
-                                </div>
-                            </td>
-                            <td>No swinging</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Hammer Curls</span></td>
-                            <td><span class="exercise-sets">3 × 12</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>20</div>
-                                    <div class="weight-week"><span>W2</span>25</div>
-                                    <div class="weight-week"><span>W3</span>25</div>
-                                    <div class="weight-week"><span>W4</span>30</div>
-                                </div>
-                            </td>
-                            <td>Forearm development</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="exercise-table-container">
+                    <table class="exercise-table" id="pull-table"></table>
+                </div>
             </div>
 
             <!-- Legs Day -->
             <div id="legs" class="workout-content">
-                <table class="exercise-table">
-                    <thead>
-                        <tr>
-                            <th>Exercise</th>
-                            <th>Sets × Reps</th>
-                            <th>Progressive Overload (4 weeks)</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="exercise-name">Squat</span></td>
-                            <td><span class="exercise-sets">4 × 6-8</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>115</div>
-                                    <div class="weight-week"><span>W2</span>125</div>
-                                    <div class="weight-week"><span>W3</span>135</div>
-                                    <div class="weight-week"><span>W4</span>145</div>
-                                </div>
-                            </td>
-                            <td>King of exercises</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Romanian Deadlift</span></td>
-                            <td><span class="exercise-sets">3 × 10-12</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>95</div>
-                                    <div class="weight-week"><span>W2</span>105</div>
-                                    <div class="weight-week"><span>W3</span>115</div>
-                                    <div class="weight-week"><span>W4</span>125</div>
-                                </div>
-                            </td>
-                            <td>Hamstring focus</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Leg Press</span></td>
-                            <td><span class="exercise-sets">3 × 12-15</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>180</div>
-                                    <div class="weight-week"><span>W2</span>200</div>
-                                    <div class="weight-week"><span>W3</span>220</div>
-                                    <div class="weight-week"><span>W4</span>240</div>
-                                </div>
-                            </td>
-                            <td>Go deep</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Leg Curls</span></td>
-                            <td><span class="exercise-sets">3 × 12</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>60</div>
-                                    <div class="weight-week"><span>W2</span>70</div>
-                                    <div class="weight-week"><span>W3</span>70</div>
-                                    <div class="weight-week"><span>W4</span>80</div>
-                                </div>
-                            </td>
-                            <td>Squeeze at top</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Calf Raises</span></td>
-                            <td><span class="exercise-sets">4 × 15-20</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>100</div>
-                                    <div class="weight-week"><span>W2</span>110</div>
-                                    <div class="weight-week"><span>W3</span>120</div>
-                                    <div class="weight-week"><span>W4</span>130</div>
-                                </div>
-                            </td>
-                            <td>Full range of motion</td>
-                        </tr>
-                        <tr>
-                            <td><span class="exercise-name">Planks</span></td>
-                            <td><span class="exercise-sets">3 × 45 sec</span></td>
-                            <td>
-                                <div class="weight-progression">
-                                    <div class="weight-week"><span>W1</span>45s</div>
-                                    <div class="weight-week"><span>W2</span>50s</div>
-                                    <div class="weight-week"><span>W3</span>55s</div>
-                                    <div class="weight-week"><span>W4</span>60s</div>
-                                </div>
-                            </td>
-                            <td>Core stability</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="exercise-table-container">
+                    <table class="exercise-table" id="legs-table"></table>
+                </div>
+            </div>
+
+            <!-- Full 15-Week Schedule -->
+            <div id="full-schedule" class="workout-content">
+                <div class="full-schedule-container">
+                    <table class="full-schedule-table" id="full-schedule-table"></table>
+                </div>
             </div>
         </section>
 
@@ -1266,59 +1026,7 @@
                 <p class="section-subtitle">February 3 — May 14, 2026</p>
             </div>
 
-            <div class="phase-timeline">
-                <div class="phase-card foundation">
-                    <div class="phase-weeks">Weeks 1-4 • Feb 3 - Mar 2</div>
-                    <h3 class="phase-name">Foundation</h3>
-                    <p class="phase-focus">Learn form, build the habit, establish baseline</p>
-                    <ul class="phase-details">
-                        <li>Master compound lift technique</li>
-                        <li>Establish gym + MMA routine</li>
-                        <li>Dial in 3,000+ calorie intake</li>
-                        <li>Week 4: Deload (light weights)</li>
-                        <li>Target: +3-4 lbs gained</li>
-                    </ul>
-                </div>
-
-                <div class="phase-card building">
-                    <div class="phase-weeks">Weeks 5-8 • Mar 3 - Mar 30</div>
-                    <h3 class="phase-name">Building</h3>
-                    <p class="phase-focus">Increase weight steadily, add MMA intensity</p>
-                    <ul class="phase-details">
-                        <li>Progressive overload in full effect</li>
-                        <li>Start light sparring at Main Street</li>
-                        <li>Aim for PRs on all compounds</li>
-                        <li>Week 8: Deload</li>
-                        <li>Target: +6-8 lbs total</li>
-                    </ul>
-                </div>
-
-                <div class="phase-card intensification">
-                    <div class="phase-weeks">Weeks 9-12 • Mar 31 - Apr 27</div>
-                    <h3 class="phase-name">Intensification</h3>
-                    <p class="phase-focus">Push limits, increase MMA volume</p>
-                    <ul class="phase-details">
-                        <li>Heavier weights, lower reps on compounds</li>
-                        <li>Regular sparring sessions</li>
-                        <li>Consider 2nd MMA class on Thu</li>
-                        <li>Week 12: Deload</li>
-                        <li>Target: +12-15 lbs total</li>
-                    </ul>
-                </div>
-
-                <div class="phase-card peak">
-                    <div class="phase-weeks">Weeks 13-15 • Apr 28 - May 14</div>
-                    <h3 class="phase-name">Peak</h3>
-                    <p class="phase-focus">Test maxes, maintain gains through finals</p>
-                    <ul class="phase-details">
-                        <li>Test 1-rep maxes on big lifts</li>
-                        <li>Maintain training through finals</li>
-                        <li>Reduce volume if needed for exams</li>
-                        <li>Celebrate transformation</li>
-                        <li>Target: 165-170 lbs</li>
-                    </ul>
-                </div>
-            </div>
+            <div class="phase-timeline" id="phase-timeline"></div>
         </section>
 
         <!-- Main Street Classes -->
@@ -1332,32 +1040,32 @@
                 <div class="class-card">
                     <h4 class="class-name">Muay Thai All Levels</h4>
                     <div class="class-schedule">Mon/Tue/Wed/Thu • 6:30-7:30 PM</div>
-                    <p class="class-description">Core striking development. Learn kicks, knees, elbows, and clinch work. Your bread and butter class.</p>
+                    <p class="class-description">Core striking development. Learn kicks, knees, elbows, and clinch work.</p>
                 </div>
                 <div class="class-card">
                     <h4 class="class-name">Muay Thai Pads</h4>
                     <div class="class-schedule">Tue/Thu • 7:30-8:30 PM</div>
-                    <p class="class-description">Technical work on pads with partners. Great for timing and combinations. Stack this after All Levels on Thursday.</p>
+                    <p class="class-description">Technical pad work with partners. Great for timing and combinations.</p>
                 </div>
                 <div class="class-card">
                     <h4 class="class-name">MMA All Levels</h4>
                     <div class="class-schedule">Mon/Wed/Fri • 5:00-6:00 PM</div>
-                    <p class="class-description">Learn to combine striking and grappling. Perfect for building a complete fight game.</p>
+                    <p class="class-description">Learn to combine striking and grappling for a complete fight game.</p>
                 </div>
                 <div class="class-card">
                     <h4 class="class-name">Amateur Boxing</h4>
                     <div class="class-schedule">Mon/Tue/Wed • 7:30-8:30 PM</div>
-                    <p class="class-description">Hand speed, footwork, head movement. Excellent complement to Muay Thai. Hit this on Fridays after class.</p>
+                    <p class="class-description">Hand speed, footwork, head movement. Excellent complement to Muay Thai.</p>
                 </div>
                 <div class="class-card">
                     <h4 class="class-name">Muay Thai Sparring</h4>
                     <div class="class-schedule">Saturday • 11:00 AM-12:00 PM</div>
-                    <p class="class-description">Apply everything you learned under pressure. Your weekly skill test. Don't skip this.</p>
+                    <p class="class-description">Apply everything under pressure. Your weekly skill test.</p>
                 </div>
                 <div class="class-card">
                     <h4 class="class-name">Fight Fit</h4>
                     <div class="class-schedule">Daily • Various times</div>
-                    <p class="class-description">High-intensity conditioning. Good cardio option if you need extra burn, but not required with your lifting schedule.</p>
+                    <p class="class-description">High-intensity conditioning for extra cardio when needed.</p>
                 </div>
             </div>
         </section>
@@ -1369,310 +1077,7 @@
                 <p class="section-subtitle">Hour by hour, so you never have to think</p>
             </div>
 
-            <div class="daily-accordion">
-                <!-- Monday -->
-                <div class="daily-item">
-                    <div class="daily-header" onclick="toggleDaily(this)">
-                        <div>
-                            <div class="daily-day">Monday</div>
-                            <div class="daily-summary">Push Day + Muay Thai Pads</div>
-                        </div>
-                        <div class="daily-toggle">+</div>
-                    </div>
-                    <div class="daily-content">
-                        <div class="time-block">
-                            <div class="time-block-time">7:00 AM</div>
-                            <div class="time-block-activity">Wake up, light breakfast (eggs, toast)</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">8:00-9:30 AM</div>
-                            <div class="time-block-activity highlight">GYM: Push Day</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">10:00 AM</div>
-                            <div class="time-block-activity">Post-workout meal (big breakfast at dining hall)</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">11:00-2:00 PM</div>
-                            <div class="time-block-activity">Study / Project work</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">2:30-4:00 PM</div>
-                            <div class="time-block-activity">ACCT 2302 Lecture</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">4:00-5:15 PM</div>
-                            <div class="time-block-activity">Meal + Rest</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">5:30-7:00 PM</div>
-                            <div class="time-block-activity">SCLT 3384 Lecture</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">7:30-8:30 PM</div>
-                            <div class="time-block-activity mma-highlight">Main Street: Muay Thai Pads</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">9:00 PM</div>
-                            <div class="time-block-activity">Dinner (big meal, protein focus)</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tuesday -->
-                <div class="daily-item">
-                    <div class="daily-header" onclick="toggleDaily(this)">
-                        <div>
-                            <div class="daily-day">Tuesday</div>
-                            <div class="daily-summary">Pull Day (Heavy class day)</div>
-                        </div>
-                        <div class="daily-toggle">+</div>
-                    </div>
-                    <div class="daily-content">
-                        <div class="time-block">
-                            <div class="time-block-time">7:00 AM</div>
-                            <div class="time-block-activity">Wake up, breakfast</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">8:00-9:30 AM</div>
-                            <div class="time-block-activity highlight">GYM: Pull Day (Deadlift, Rows, Pull-ups)</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">10:00 AM</div>
-                            <div class="time-block-activity">Post-workout meal</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">11:00-2:00 PM</div>
-                            <div class="time-block-activity">Study / Maritime project</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">2:30-4:00 PM</div>
-                            <div class="time-block-activity">TLIM 3340 Lecture</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">4:00-5:15 PM</div>
-                            <div class="time-block-activity">Quick meal</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">5:30-8:30 PM</div>
-                            <div class="time-block-activity">Back-to-back classes (SCLT 3389 + SCLT 3387)</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">8:45 PM</div>
-                            <div class="time-block-activity">Dinner (you earned it)</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Wednesday -->
-                <div class="daily-item">
-                    <div class="daily-header" onclick="toggleDaily(this)">
-                        <div>
-                            <div class="daily-day">Wednesday</div>
-                            <div class="daily-summary">Legs Day + Muay Thai</div>
-                        </div>
-                        <div class="daily-toggle">+</div>
-                    </div>
-                    <div class="daily-content">
-                        <div class="time-block">
-                            <div class="time-block-time">7:00 AM</div>
-                            <div class="time-block-activity">Wake up, breakfast</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">8:00-9:30 AM</div>
-                            <div class="time-block-activity highlight">GYM: Legs Day (Squat, RDL, Leg Press)</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">10:00 AM</div>
-                            <div class="time-block-activity">Post-workout meal</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">11:00-2:00 PM</div>
-                            <div class="time-block-activity">Study / Rest (legs will be tired)</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">2:30-4:00 PM</div>
-                            <div class="time-block-activity">ACCT 2302 Lecture</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">4:00-6:00 PM</div>
-                            <div class="time-block-activity">Meal + Rest / Optional MMA at 5pm</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">6:30-7:30 PM</div>
-                            <div class="time-block-activity mma-highlight">Main Street: Muay Thai All Levels</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">8:00 PM</div>
-                            <div class="time-block-activity">Dinner, foam roll legs</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Thursday -->
-                <div class="daily-item">
-                    <div class="daily-header" onclick="toggleDaily(this)">
-                        <div>
-                            <div class="daily-day">Thursday</div>
-                            <div class="daily-summary">BEST DAY — Push #2 + Triple MMA Session</div>
-                        </div>
-                        <div class="daily-toggle">+</div>
-                    </div>
-                    <div class="daily-content">
-                        <div class="time-block">
-                            <div class="time-block-time">9:00 AM</div>
-                            <div class="time-block-activity">Sleep in, big breakfast</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">10:30-12:00 PM</div>
-                            <div class="time-block-activity highlight">GYM: Push Day #2</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">12:30 PM</div>
-                            <div class="time-block-activity">Lunch</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">1:00-4:30 PM</div>
-                            <div class="time-block-activity">Study / Projects / Free time</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">5:00-6:00 PM</div>
-                            <div class="time-block-activity mma-highlight">Main Street: MMA All Levels</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">6:30-7:30 PM</div>
-                            <div class="time-block-activity mma-highlight">Main Street: Muay Thai All Levels</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">7:30-8:30 PM</div>
-                            <div class="time-block-activity mma-highlight">Main Street: Muay Thai Pads</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">9:00 PM</div>
-                            <div class="time-block-activity">Big dinner (you burned a lot today)</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Friday -->
-                <div class="daily-item">
-                    <div class="daily-header" onclick="toggleDaily(this)">
-                        <div>
-                            <div class="daily-day">Friday</div>
-                            <div class="daily-summary">Pull Day #2 + Optional Boxing</div>
-                        </div>
-                        <div class="daily-toggle">+</div>
-                    </div>
-                    <div class="daily-content">
-                        <div class="time-block">
-                            <div class="time-block-time">7:00 AM</div>
-                            <div class="time-block-activity">Wake up, breakfast</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">8:00-9:30 AM</div>
-                            <div class="time-block-activity highlight">GYM: Pull Day #2</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">10:00 AM</div>
-                            <div class="time-block-activity">Post-workout meal</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">11:00-2:00 PM</div>
-                            <div class="time-block-activity">Study / Internship applications</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">2:00-5:00 PM</div>
-                            <div class="time-block-activity">Free time / Errands</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">5:30-7:00 PM</div>
-                            <div class="time-block-activity">SCLT 3385 Lecture</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">7:30 PM</div>
-                            <div class="time-block-activity mma-highlight">Optional: Amateur Boxing OR rest</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Saturday -->
-                <div class="daily-item">
-                    <div class="daily-header" onclick="toggleDaily(this)">
-                        <div>
-                            <div class="daily-day">Saturday</div>
-                            <div class="daily-summary">Sparring + Recovery</div>
-                        </div>
-                        <div class="daily-toggle">+</div>
-                    </div>
-                    <div class="daily-content">
-                        <div class="time-block">
-                            <div class="time-block-time">9:00 AM</div>
-                            <div class="time-block-activity">Wake up, light breakfast</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">10:30 AM</div>
-                            <div class="time-block-activity">Head to Main Street</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">11:00-12:00 PM</div>
-                            <div class="time-block-activity mma-highlight">Muay Thai Sparring (apply what you learned)</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">12:30 PM</div>
-                            <div class="time-block-activity">Lunch</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">1:00-3:00 PM</div>
-                            <div class="time-block-activity">Meal prep for the week</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">3:00-6:00 PM</div>
-                            <div class="time-block-activity">Free time / Social / Gaming</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">Evening</div>
-                            <div class="time-block-activity">Rest, recover, enjoy yourself</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sunday -->
-                <div class="daily-item">
-                    <div class="daily-header" onclick="toggleDaily(this)">
-                        <div>
-                            <div class="daily-day">Sunday</div>
-                            <div class="daily-summary">Full Rest Day</div>
-                        </div>
-                        <div class="daily-toggle">+</div>
-                    </div>
-                    <div class="daily-content">
-                        <div class="time-block">
-                            <div class="time-block-time">Morning</div>
-                            <div class="time-block-activity">Sleep in — your body grows while you rest</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">Late Morning</div>
-                            <div class="time-block-activity">Light stretching / Mobility (15-20 min)</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">Afternoon</div>
-                            <div class="time-block-activity">Meal prep, grocery run if needed</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">Afternoon</div>
-                            <div class="time-block-activity">Weekly review: track weight, plan next week</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">Evening</div>
-                            <div class="time-block-activity">Light study, prep for Monday</div>
-                        </div>
-                        <div class="time-block">
-                            <div class="time-block-time">Early Bed</div>
-                            <div class="time-block-activity">Sleep is when you grow — protect it</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="daily-accordion" id="daily-accordion"></div>
         </section>
 
         <!-- Nutrition -->
@@ -1718,7 +1123,479 @@
     </footer>
 
     <script>
-        // Workout tab switching
+        // ============ CONFIGURATION ============
+        const SEMESTER_START = new Date('2026-02-02'); // Monday of Week 1
+        const SEMESTER_END = new Date('2026-05-14');
+        
+        // EXAMS AND DEADLINES FROM SYLLABI
+        const ACADEMIC_EVENTS = [
+            // ACCT 2302 - Managerial Accounting (CASA Testing Center)
+            { date: '2026-02-25', endDate: '2026-02-27', name: 'ACCT 2302 Exam 1', type: 'exam', course: 'ACCT', major: true },
+            { date: '2026-04-01', endDate: '2026-04-03', name: 'ACCT 2302 Exam 2', type: 'exam', course: 'ACCT', major: true },
+            { date: '2026-05-06', endDate: '2026-05-08', name: 'ACCT 2302 Final Exam', type: 'exam', course: 'ACCT', major: true },
+            
+            // SCLT 3384 - Logistics Tech (Take-home)
+            { date: '2026-03-23', endDate: '2026-03-27', name: 'SCLT 3384 Midterm (Take-home)', type: 'exam', course: 'SCLT3384' },
+            { date: '2026-05-05', endDate: '2026-05-08', name: 'SCLT 3384 Final (Take-home)', type: 'exam', course: 'SCLT3384', major: true },
+            
+            // SCLT 3385 - Transport Economics
+            { date: '2026-03-26', name: 'SCLT 3385 Exam 1', type: 'exam', course: 'SCLT3385' },
+            { date: '2026-04-30', name: 'SCLT 3385 Exam 2', type: 'exam', course: 'SCLT3385', major: true },
+            
+            // SCLT 3387 - Procurement
+            { date: '2026-02-19', endDate: '2026-02-21', name: 'SCLT 3387 Quiz 1', type: 'quiz', course: 'SCLT3387' },
+            { date: '2026-03-28', name: 'SCLT 3387 Team Project Due', type: 'deadline', course: 'SCLT3387' },
+            { date: '2026-04-02', endDate: '2026-04-04', name: 'SCLT 3387 Quiz 2', type: 'quiz', course: 'SCLT3387' },
+            { date: '2026-04-30', endDate: '2026-05-02', name: 'SCLT 3387 Quiz 3', type: 'quiz', course: 'SCLT3387' },
+            { date: '2026-05-07', name: 'SCLT 3387 Final Exam', type: 'exam', course: 'SCLT3387', major: true },
+            
+            // SCLT 3389 - Transportation Law
+            { date: '2026-03-10', name: 'SCLT 3389 Exam 1', type: 'exam', course: 'SCLT3389' },
+            { date: '2026-04-28', name: 'SCLT 3389 Project Due', type: 'deadline', course: 'SCLT3389' },
+            { date: '2026-05-05', name: 'SCLT 3389 Exam 2', type: 'exam', course: 'SCLT3389', major: true },
+            
+            // TLIM 3340 - Organizational Leadership
+            { date: '2026-02-17', name: 'TLIM 3340 Exam 1', type: 'exam', course: 'TLIM' },
+            { date: '2026-03-24', name: 'TLIM 3340 Exam 2', type: 'exam', course: 'TLIM' },
+            { date: '2026-04-21', name: 'TLIM 3340 Essay Due', type: 'deadline', course: 'TLIM' },
+            { date: '2026-04-28', name: 'TLIM 3340 Exam 3', type: 'exam', course: 'TLIM', major: true },
+            
+            // Spring Break
+            { date: '2026-03-16', endDate: '2026-03-20', name: 'SPRING BREAK 🌴', type: 'break' },
+        ];
+
+        // For demo/testing, use current date. In production, use: new Date()
+        const TODAY = new Date();
+        
+        // ============ CALCULATE CURRENT WEEK ============
+        function getCurrentWeek() {
+            const msPerWeek = 7 * 24 * 60 * 60 * 1000;
+            const weeksSinceStart = Math.floor((TODAY - SEMESTER_START) / msPerWeek) + 1;
+            return Math.max(1, Math.min(15, weeksSinceStart));
+        }
+
+        function getDayOfWeek() {
+            return TODAY.getDay();
+        }
+
+        const CURRENT_WEEK = getCurrentWeek();
+        const CURRENT_DAY = getDayOfWeek();
+
+        // ============ HELPER FUNCTIONS ============
+        function getEventsForWeek(weekNum) {
+            const weekStart = new Date(SEMESTER_START);
+            weekStart.setDate(weekStart.getDate() + (weekNum - 1) * 7);
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+
+            return ACADEMIC_EVENTS.filter(event => {
+                const eventDate = new Date(event.date);
+                const eventEndDate = event.endDate ? new Date(event.endDate) : eventDate;
+                return (eventDate >= weekStart && eventDate <= weekEnd) || 
+                       (eventEndDate >= weekStart && eventEndDate <= weekEnd) ||
+                       (eventDate <= weekStart && eventEndDate >= weekEnd);
+            });
+        }
+
+        // ============ UPDATE BANNER ============
+        function updateBanner() {
+            const daysRemaining = Math.ceil((SEMESTER_END - TODAY) / (24 * 60 * 60 * 1000));
+            document.getElementById('current-week-text').textContent = `WEEK ${CURRENT_WEEK}`;
+            document.getElementById('current-date-text').textContent = TODAY.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+            document.getElementById('days-remaining-text').textContent = Math.max(0, daysRemaining);
+            document.getElementById('hero-current-week').textContent = CURRENT_WEEK;
+        }
+
+        // ============ WEEKLY SCHEDULE GRID ============
+        function renderWeekGrid() {
+            const days = [
+                { name: 'Monday', dayIndex: 1, focus: 'Push + Muay Thai', activities: [
+                    { time: '8:00-9:30 AM', name: 'Push Day (Gym)', type: 'gym' },
+                    { time: '2:30-4:00 PM', name: 'ACCT 2302', type: 'class' },
+                    { time: '5:30-7:00 PM', name: 'SCLT 3384', type: 'class' },
+                    { time: '7:30-8:30 PM', name: 'Muay Thai Pads', type: 'mma' }
+                ]},
+                { name: 'Tuesday', dayIndex: 2, focus: 'Pull Day', activities: [
+                    { time: '8:00-9:30 AM', name: 'Pull Day (Gym)', type: 'gym' },
+                    { time: '2:30-4:00 PM', name: 'TLIM 3340', type: 'class' },
+                    { time: '5:30-7:00 PM', name: 'SCLT 3389', type: 'class' },
+                    { time: '7:00-8:30 PM', name: 'SCLT 3387', type: 'class' }
+                ]},
+                { name: 'Wednesday', dayIndex: 3, focus: 'Legs + Muay Thai', activities: [
+                    { time: '8:00-9:30 AM', name: 'Legs Day (Gym)', type: 'gym' },
+                    { time: '2:30-4:00 PM', name: 'ACCT 2302', type: 'class' },
+                    { time: '6:30-7:30 PM', name: 'Muay Thai All Levels', type: 'mma' }
+                ]},
+                { name: 'Thursday', dayIndex: 4, focus: 'Push #2 + Triple MMA', highlight: true, activities: [
+                    { time: '10:30-12:00 PM', name: 'Push Day #2 (Gym)', type: 'gym' },
+                    { time: '5:00-6:00 PM', name: 'MMA All Levels', type: 'mma' },
+                    { time: '6:30-7:30 PM', name: 'Muay Thai All Levels', type: 'mma' },
+                    { time: '7:30-8:30 PM', name: 'Muay Thai Pads', type: 'mma' }
+                ]},
+                { name: 'Friday', dayIndex: 5, focus: 'Pull #2', activities: [
+                    { time: '8:00-9:30 AM', name: 'Pull Day #2 (Gym)', type: 'gym' },
+                    { time: '5:30-7:00 PM', name: 'SCLT 3385', type: 'class' },
+                    { time: '7:30 PM', name: 'Optional Boxing', type: 'mma' }
+                ]},
+                { name: 'Saturday', dayIndex: 6, focus: 'Sparring + Recovery', activities: [
+                    { time: '11:00 AM-12:00 PM', name: 'Muay Thai Sparring', type: 'mma' },
+                    { time: 'Afternoon', name: 'Meal Prep + Recovery', type: 'rest' }
+                ]},
+                { name: 'Sunday', dayIndex: 0, focus: 'Full Rest', rest: true, activities: [
+                    { time: 'All Day', name: 'REST — You grow while you sleep', type: 'rest' },
+                    { time: 'Afternoon', name: 'Weekly Review + Meal Prep', type: 'rest' }
+                ]}
+            ];
+
+            const grid = document.getElementById('week-grid');
+            grid.innerHTML = days.map(day => {
+                const isToday = day.dayIndex === CURRENT_DAY;
+                const classes = ['day-card'];
+                if (day.rest) classes.push('rest');
+                if (day.highlight) classes.push('highlight');
+                if (isToday) classes.push('today');
+
+                return `
+                    <div class="${classes.join(' ')}">
+                        <div class="day-name">${day.name}</div>
+                        <div class="day-date">${day.focus}</div>
+                        <div class="day-activities">
+                            ${day.activities.map(a => `
+                                <div class="activity ${a.type}">
+                                    <span class="activity-time">${a.time}</span>
+                                    <span class="activity-name">${a.name}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============ PROGRESSIVE OVERLOAD DATA ============
+        const exercises = {
+            push: [
+                { name: 'Bench Press', sets: '4×6-8', start: 95, increment: 5, notes: 'Add 5 lbs when you hit 4×8' },
+                { name: 'Overhead Press', sets: '3×8-10', start: 65, increment: 5, notes: 'Main shoulder builder' },
+                { name: 'Incline DB Press', sets: '3×10-12', start: 30, increment: 2.5, notes: 'Focus on stretch' },
+                { name: 'Lateral Raises', sets: '3×12-15', start: 15, increment: 2.5, notes: 'Control negative' },
+                { name: 'Tricep Dips', sets: '3×8-12', start: 0, increment: 5, notes: 'BW, then add weight', isBodyweight: true },
+                { name: 'Tricep Pushdowns', sets: '3×12-15', start: 40, increment: 5, notes: 'Squeeze at bottom' }
+            ],
+            pull: [
+                { name: 'Deadlift', sets: '4×5', start: 135, increment: 10, notes: 'Add 10 lbs/week' },
+                { name: 'Barbell Row', sets: '4×6-8', start: 85, increment: 5, notes: 'Squeeze shoulder blades' },
+                { name: 'Pull-ups', sets: '3×AMRAP', start: 0, increment: 0, notes: 'Track reps weekly', isBodyweight: true, noProgression: true },
+                { name: 'Lat Pulldown', sets: '3×10-12', start: 90, increment: 5, notes: 'Full stretch at top' },
+                { name: 'Face Pulls', sets: '3×15-20', start: 30, increment: 2.5, notes: 'Rear delts + posture' },
+                { name: 'Barbell Curls', sets: '3×10-12', start: 40, increment: 2.5, notes: 'No swinging' },
+                { name: 'Hammer Curls', sets: '3×12', start: 20, increment: 2.5, notes: 'Forearm development' }
+            ],
+            legs: [
+                { name: 'Squat', sets: '4×6-8', start: 115, increment: 10, notes: 'King of exercises' },
+                { name: 'Romanian Deadlift', sets: '3×10-12', start: 95, increment: 10, notes: 'Hamstring focus' },
+                { name: 'Leg Press', sets: '3×12-15', start: 180, increment: 20, notes: 'Go deep' },
+                { name: 'Leg Curls', sets: '3×12', start: 60, increment: 5, notes: 'Squeeze at top' },
+                { name: 'Calf Raises', sets: '4×15-20', start: 100, increment: 10, notes: 'Full ROM' },
+                { name: 'Planks', sets: '3×45sec', start: 45, increment: 5, notes: 'Add 5 sec/week', isTime: true }
+            ]
+        };
+
+        function getWeight(exercise, week) {
+            if (exercise.noProgression) return 'BW';
+            if (exercise.isBodyweight) {
+                const added = Math.floor((week - 1) / 2) * exercise.increment;
+                return added === 0 ? 'BW' : `BW+${added}`;
+            }
+            if (exercise.isTime) {
+                return `${exercise.start + (week - 1) * exercise.increment}s`;
+            }
+            const isDeload = [4, 8, 12].includes(week);
+            let weight = exercise.start + (week - 1) * exercise.increment;
+            if (isDeload) weight = Math.round(weight * 0.9);
+            return weight;
+        }
+
+        function renderExerciseTable(type) {
+            const table = document.getElementById(`${type}-table`);
+            const exs = exercises[type];
+            
+            let html = '<thead><tr><th>Exercise</th><th>Sets</th>';
+            for (let w = 1; w <= 15; w++) {
+                const isCurrentWeek = w === CURRENT_WEEK;
+                const isDeload = [4, 8, 12].includes(w);
+                let weekLabel = `W${w}`;
+                if (isDeload) weekLabel += ' 🔄';
+                html += `<th class="${isCurrentWeek ? 'current-week-col' : ''}">${weekLabel}</th>`;
+            }
+            html += '<th>Notes</th></tr></thead><tbody>';
+
+            exs.forEach(ex => {
+                html += `<tr><td>${ex.name}</td><td class="exercise-sets">${ex.sets}</td>`;
+                for (let w = 1; w <= 15; w++) {
+                    const isCurrentWeek = w === CURRENT_WEEK;
+                    const weight = getWeight(ex, w);
+                    html += `<td class="weight-cell ${isCurrentWeek ? 'current-week-col' : ''}">${weight}</td>`;
+                }
+                html += `<td style="font-size:0.75rem;color:var(--text-secondary)">${ex.notes}</td></tr>`;
+            });
+
+            html += '</tbody>';
+            table.innerHTML = html;
+        }
+
+        // ============ FULL 15-WEEK SCHEDULE ============
+        function renderFullSchedule() {
+            const table = document.getElementById('full-schedule-table');
+            
+            const weeks = [];
+            for (let w = 1; w <= 15; w++) {
+                const weekStart = new Date(SEMESTER_START);
+                weekStart.setDate(weekStart.getDate() + (w - 1) * 7);
+                const weekEnd = new Date(weekStart);
+                weekEnd.setDate(weekEnd.getDate() + 6);
+
+                let phase, phaseClass;
+                if (w <= 4) { phase = 'Foundation'; phaseClass = 'foundation'; }
+                else if (w <= 8) { phase = 'Building'; phaseClass = 'building'; }
+                else if (w <= 12) { phase = 'Intensification'; phaseClass = 'intensification'; }
+                else { phase = 'Peak'; phaseClass = 'peak'; }
+
+                const isDeload = [4, 8, 12].includes(w);
+                const isCurrent = w === CURRENT_WEEK;
+                const weekEvents = getEventsForWeek(w);
+                const hasExams = weekEvents.some(e => e.type === 'exam' && e.major);
+
+                weeks.push({
+                    num: w,
+                    start: weekStart,
+                    end: weekEnd,
+                    phase,
+                    phaseClass,
+                    isDeload,
+                    isCurrent,
+                    hasExams,
+                    events: weekEvents,
+                    bench: getWeight(exercises.push[0], w),
+                    squat: getWeight(exercises.legs[0], w),
+                    deadlift: getWeight(exercises.pull[0], w)
+                });
+            }
+
+            let html = `
+                <thead>
+                    <tr>
+                        <th>Week</th>
+                        <th>Dates</th>
+                        <th>Phase</th>
+                        <th>Bench</th>
+                        <th>Squat</th>
+                        <th>Deadlift</th>
+                        <th>Training Focus</th>
+                        <th>Exams & Deadlines</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+
+            weeks.forEach(w => {
+                const rowClasses = [];
+                if (w.isCurrent) rowClasses.push('current-week-row');
+                if (w.isDeload) rowClasses.push('deload-row');
+                if (w.hasExams) rowClasses.push('exam-week-row');
+
+                const dateStr = `${w.start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${w.end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+
+                let weekBadge = '';
+                if (w.isCurrent) weekBadge = '<span class="week-badge current">NOW</span>';
+                else if (w.isDeload) weekBadge = '<span class="week-badge deload">DELOAD</span>';
+
+                let trainingFocus = '';
+                if (w.isDeload) {
+                    trainingFocus = 'Light weights, focus on form, recover';
+                } else if (w.phase === 'Foundation') {
+                    trainingFocus = 'Learn form, build habits, establish baseline';
+                } else if (w.phase === 'Building') {
+                    trainingFocus = 'Progressive overload, increase intensity';
+                } else if (w.phase === 'Intensification') {
+                    trainingFocus = 'Push limits, heavier weights, more MMA';
+                } else {
+                    trainingFocus = 'Test maxes, maintain through finals';
+                }
+
+                // Check for spring break
+                const springBreak = w.events.find(e => e.type === 'break');
+                if (springBreak) {
+                    trainingFocus = '🌴 REST & RECOVER — Enjoy the break!';
+                }
+
+                // Render events
+                let eventsHtml = '';
+                w.events.forEach(e => {
+                    if (e.type === 'exam') {
+                        eventsHtml += `<span class="exam-item ${e.major ? 'major' : ''}">${e.name}</span>`;
+                    } else if (e.type === 'quiz') {
+                        eventsHtml += `<span class="exam-item">${e.name}</span>`;
+                    } else if (e.type === 'deadline') {
+                        eventsHtml += `<span class="deadline-item">📝 ${e.name}</span>`;
+                    } else if (e.type === 'break') {
+                        eventsHtml += `<span class="deadline-item" style="background:rgba(0,255,136,0.15);color:var(--accent-green);border-left-color:var(--accent-green)">${e.name}</span>`;
+                    }
+                });
+
+                html += `
+                    <tr class="${rowClasses.join(' ')}">
+                        <td><strong>Week ${w.num}</strong>${weekBadge}</td>
+                        <td>${dateStr}</td>
+                        <td><span class="phase-tag ${w.phaseClass}">${w.phase}</span></td>
+                        <td class="weight-cell">${w.bench}</td>
+                        <td class="weight-cell">${w.squat}</td>
+                        <td class="weight-cell">${w.deadlift}</td>
+                        <td style="font-size:0.8rem">${trainingFocus}</td>
+                        <td>${eventsHtml || '<span style="color:var(--text-muted)">—</span>'}</td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody>';
+            table.innerHTML = html;
+        }
+
+        // ============ PHASES ============
+        function renderPhases() {
+            const phases = [
+                { name: 'Foundation', weeks: '1-4', dates: 'Feb 3 - Mar 2', class: 'foundation', weekRange: [1, 4],
+                  focus: 'Learn form, build the habit, establish baseline',
+                  details: ['Master compound lift technique', 'Establish gym + MMA routine', 'Dial in 3,000+ calorie intake', 'Week 4: Deload (light weights)', 'Target: +3-4 lbs gained'] },
+                { name: 'Building', weeks: '5-8', dates: 'Mar 3 - Mar 30', class: 'building', weekRange: [5, 8],
+                  focus: 'Increase weight steadily, add MMA intensity',
+                  details: ['Progressive overload in full effect', 'Start light sparring at Main Street', 'Aim for PRs on all compounds', 'Week 8: Deload', 'Target: +6-8 lbs total'] },
+                { name: 'Intensification', weeks: '9-12', dates: 'Mar 31 - Apr 27', class: 'intensification', weekRange: [9, 12],
+                  focus: 'Push limits, increase MMA volume',
+                  details: ['Heavier weights, lower reps', 'Regular sparring sessions', 'Consider 2nd MMA class', 'Week 12: Deload', 'Target: +12-15 lbs total'] },
+                { name: 'Peak', weeks: '13-15', dates: 'Apr 28 - May 14', class: 'peak', weekRange: [13, 15],
+                  focus: 'Test maxes, maintain gains through finals',
+                  details: ['Test 1-rep maxes on big lifts', 'Maintain training through finals', 'Reduce volume if needed for exams', 'Celebrate transformation', 'Target: 165-170 lbs'] }
+            ];
+
+            const container = document.getElementById('phase-timeline');
+            container.innerHTML = phases.map(p => {
+                const isCurrent = CURRENT_WEEK >= p.weekRange[0] && CURRENT_WEEK <= p.weekRange[1];
+                return `
+                    <div class="phase-card ${p.class} ${isCurrent ? 'current-phase' : ''}">
+                        <div class="phase-weeks">Weeks ${p.weeks} • ${p.dates}</div>
+                        <h3 class="phase-name">${p.name}</h3>
+                        <p class="phase-focus">${p.focus}</p>
+                        <ul class="phase-details">
+                            ${p.details.map(d => `<li>${d}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============ DAILY BREAKDOWN ============
+        function renderDailyBreakdown() {
+            const days = [
+                { name: 'Monday', dayIndex: 1, summary: 'Push Day + Muay Thai Pads', blocks: [
+                    { time: '7:00 AM', activity: 'Wake up, light breakfast (eggs, toast)' },
+                    { time: '8:00-9:30 AM', activity: 'GYM: Push Day', highlight: 'gym' },
+                    { time: '10:00 AM', activity: 'Post-workout meal (big breakfast at dining hall)' },
+                    { time: '11:00-2:00 PM', activity: 'Study / Project work' },
+                    { time: '2:30-4:00 PM', activity: 'ACCT 2302 Lecture' },
+                    { time: '4:00-5:15 PM', activity: 'Meal + Rest' },
+                    { time: '5:30-7:00 PM', activity: 'SCLT 3384 Lecture' },
+                    { time: '7:30-8:30 PM', activity: 'Main Street: Muay Thai Pads', highlight: 'mma' },
+                    { time: '9:00 PM', activity: 'Dinner (big meal, protein focus)' }
+                ]},
+                { name: 'Tuesday', dayIndex: 2, summary: 'Pull Day (Heavy class day)', blocks: [
+                    { time: '7:00 AM', activity: 'Wake up, breakfast' },
+                    { time: '8:00-9:30 AM', activity: 'GYM: Pull Day (Deadlift, Rows, Pull-ups)', highlight: 'gym' },
+                    { time: '10:00 AM', activity: 'Post-workout meal' },
+                    { time: '11:00-2:00 PM', activity: 'Study / Maritime project' },
+                    { time: '2:30-4:00 PM', activity: 'TLIM 3340 Lecture' },
+                    { time: '4:00-5:15 PM', activity: 'Quick meal' },
+                    { time: '5:30-7:00 PM', activity: 'SCLT 3389 Transportation Law' },
+                    { time: '7:00-8:30 PM', activity: 'SCLT 3387 Procurement' },
+                    { time: '8:45 PM', activity: 'Dinner (you earned it)' }
+                ]},
+                { name: 'Wednesday', dayIndex: 3, summary: 'Legs Day + Muay Thai', blocks: [
+                    { time: '7:00 AM', activity: 'Wake up, breakfast' },
+                    { time: '8:00-9:30 AM', activity: 'GYM: Legs Day (Squat, RDL, Leg Press)', highlight: 'gym' },
+                    { time: '10:00 AM', activity: 'Post-workout meal' },
+                    { time: '11:00-2:00 PM', activity: 'Study / Rest (legs will be tired)' },
+                    { time: '2:30-4:00 PM', activity: 'ACCT 2302 Lecture' },
+                    { time: '4:00-6:00 PM', activity: 'Meal + Rest / Optional MMA at 5pm' },
+                    { time: '6:30-7:30 PM', activity: 'Main Street: Muay Thai All Levels', highlight: 'mma' },
+                    { time: '8:00 PM', activity: 'Dinner, foam roll legs' }
+                ]},
+                { name: 'Thursday', dayIndex: 4, summary: 'BEST DAY — Push #2 + Triple MMA Session', blocks: [
+                    { time: '9:00 AM', activity: 'Sleep in, big breakfast' },
+                    { time: '10:30-12:00 PM', activity: 'GYM: Push Day #2', highlight: 'gym' },
+                    { time: '12:30 PM', activity: 'Lunch' },
+                    { time: '1:00-4:30 PM', activity: 'Study / Projects / Free time' },
+                    { time: '5:00-6:00 PM', activity: 'Main Street: MMA All Levels', highlight: 'mma' },
+                    { time: '6:30-7:30 PM', activity: 'Main Street: Muay Thai All Levels', highlight: 'mma' },
+                    { time: '7:30-8:30 PM', activity: 'Main Street: Muay Thai Pads', highlight: 'mma' },
+                    { time: '9:00 PM', activity: 'Big dinner (you burned a lot today)' }
+                ]},
+                { name: 'Friday', dayIndex: 5, summary: 'Pull Day #2 + SCLT 3385', blocks: [
+                    { time: '7:00 AM', activity: 'Wake up, breakfast' },
+                    { time: '8:00-9:30 AM', activity: 'GYM: Pull Day #2', highlight: 'gym' },
+                    { time: '10:00 AM', activity: 'Post-workout meal' },
+                    { time: '11:00-2:00 PM', activity: 'Study / Internship applications' },
+                    { time: '2:00-5:00 PM', activity: 'Free time / Errands' },
+                    { time: '5:30-7:00 PM', activity: 'SCLT 3385 Transport Econ (Online)' },
+                    { time: '7:30 PM', activity: 'Optional: Amateur Boxing OR rest', highlight: 'mma' }
+                ]},
+                { name: 'Saturday', dayIndex: 6, summary: 'Sparring + Recovery', blocks: [
+                    { time: '9:00 AM', activity: 'Wake up, light breakfast' },
+                    { time: '10:30 AM', activity: 'Head to Main Street' },
+                    { time: '11:00-12:00 PM', activity: 'Muay Thai Sparring (apply what you learned)', highlight: 'mma' },
+                    { time: '12:30 PM', activity: 'Lunch' },
+                    { time: '1:00-3:00 PM', activity: 'Meal prep for the week' },
+                    { time: '3:00-6:00 PM', activity: 'Free time / Social / Gaming' },
+                    { time: 'Evening', activity: 'Rest, recover, enjoy yourself' }
+                ]},
+                { name: 'Sunday', dayIndex: 0, summary: 'Full Rest Day', blocks: [
+                    { time: 'Morning', activity: 'Sleep in — your body grows while you rest' },
+                    { time: 'Late Morning', activity: 'Light stretching / Mobility (15-20 min)' },
+                    { time: 'Afternoon', activity: 'Meal prep, grocery run if needed' },
+                    { time: 'Afternoon', activity: 'Weekly review: track weight, plan next week' },
+                    { time: 'Evening', activity: 'Light study, prep for Monday' },
+                    { time: 'Early Bed', activity: 'Sleep is when you grow — protect it' }
+                ]}
+            ];
+
+            const container = document.getElementById('daily-accordion');
+            container.innerHTML = days.map(day => {
+                const isToday = day.dayIndex === CURRENT_DAY;
+                return `
+                    <div class="daily-item ${isToday ? 'today-item' : ''}">
+                        <div class="daily-header" onclick="toggleDaily(this)">
+                            <div>
+                                <div class="daily-day">
+                                    ${day.name}
+                                    ${isToday ? '<span class="today-badge">TODAY</span>' : ''}
+                                </div>
+                                <div class="daily-summary">${day.summary}</div>
+                            </div>
+                            <div class="daily-toggle">+</div>
+                        </div>
+                        <div class="daily-content">
+                            ${day.blocks.map(b => `
+                                <div class="time-block">
+                                    <div class="time-block-time">${b.time}</div>
+                                    <div class="time-block-activity ${b.highlight === 'gym' ? 'highlight' : ''} ${b.highlight === 'mma' ? 'mma-highlight' : ''}">${b.activity}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============ INTERACTIONS ============
         function showWorkout(workout) {
             document.querySelectorAll('.workout-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.workout-tab').forEach(el => el.classList.remove('active'));
@@ -1726,7 +1603,6 @@
             event.target.classList.add('active');
         }
 
-        // Daily accordion
         function toggleDaily(header) {
             const item = header.parentElement;
             item.classList.toggle('open');
@@ -1738,7 +1614,6 @@
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                
                 document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                 this.classList.add('active');
             });
@@ -1748,21 +1623,25 @@
         window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('section[id]');
             let current = '';
-            
             sections.forEach(section => {
-                const sectionTop = section.offsetTop - 100;
-                if (scrollY >= sectionTop) {
-                    current = section.getAttribute('id');
-                }
+                const sectionTop = section.offsetTop - 150;
+                if (scrollY >= sectionTop) current = section.getAttribute('id');
             });
-
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
-                }
+                if (link.getAttribute('href') === '#' + current) link.classList.add('active');
             });
         });
+
+        // ============ INITIALIZE ============
+        updateBanner();
+        renderWeekGrid();
+        renderExerciseTable('push');
+        renderExerciseTable('pull');
+        renderExerciseTable('legs');
+        renderFullSchedule();
+        renderPhases();
+        renderDailyBreakdown();
     </script>
 </body>
 </html>
