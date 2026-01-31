@@ -1273,30 +1273,31 @@
         }
 
         // ============ PROGRESSIVE OVERLOAD DATA ============
+        // CALIBRATED TO: 30 lb dumbbell curl starting point
         const exercises = {
             push: [
-                { name: 'Bench Press', sets: '4×6-8', start: 95, increment: 5, notes: 'Add 5 lbs when you hit 4×8' },
-                { name: 'Overhead Press', sets: '3×8-10', start: 65, increment: 5, notes: 'Main shoulder builder' },
-                { name: 'Incline DB Press', sets: '3×10-12', start: 30, increment: 2.5, notes: 'Focus on stretch' },
-                { name: 'Lateral Raises', sets: '3×12-15', start: 15, increment: 2.5, notes: 'Control negative' },
-                { name: 'Tricep Dips', sets: '3×8-12', start: 0, increment: 5, notes: 'BW, then add weight', isBodyweight: true },
-                { name: 'Tricep Pushdowns', sets: '3×12-15', start: 40, increment: 5, notes: 'Squeeze at bottom' }
+                { name: 'Bench Press', sets: '4×6-8', start: 75, increment: 5, notes: 'Add 5 lbs when you hit 4×8' },
+                { name: 'Overhead Press', sets: '3×8-10', start: 55, increment: 5, notes: 'Main shoulder builder' },
+                { name: 'Incline DB Press', sets: '3×10-12', start: 25, increment: 2.5, notes: 'Focus on stretch' },
+                { name: 'Lateral Raises', sets: '3×12-15', start: 10, increment: 2.5, notes: 'Control negative' },
+                { name: 'Tricep Dips', sets: '3×8-12', start: 0, increment: 0, notes: 'BW — add weight when 12 easy', isBodyweight: true, noProgression: true },
+                { name: 'Tricep Pushdowns', sets: '3×12-15', start: 30, increment: 5, notes: 'Squeeze at bottom' }
             ],
             pull: [
-                { name: 'Deadlift', sets: '4×5', start: 135, increment: 10, notes: 'Add 10 lbs/week' },
-                { name: 'Barbell Row', sets: '4×6-8', start: 85, increment: 5, notes: 'Squeeze shoulder blades' },
-                { name: 'Pull-ups', sets: '3×AMRAP', start: 0, increment: 0, notes: 'Track reps weekly', isBodyweight: true, noProgression: true },
-                { name: 'Lat Pulldown', sets: '3×10-12', start: 90, increment: 5, notes: 'Full stretch at top' },
-                { name: 'Face Pulls', sets: '3×15-20', start: 30, increment: 2.5, notes: 'Rear delts + posture' },
-                { name: 'Barbell Curls', sets: '3×10-12', start: 40, increment: 2.5, notes: 'No swinging' },
-                { name: 'Hammer Curls', sets: '3×12', start: 20, increment: 2.5, notes: 'Forearm development' }
+                { name: 'Deadlift', sets: '4×5', start: 95, increment: 10, notes: 'Focus on form first' },
+                { name: 'Barbell Row', sets: '4×6-8', start: 65, increment: 5, notes: 'Squeeze shoulder blades' },
+                { name: 'Pull-ups', sets: '3×AMRAP', start: 0, increment: 0, notes: 'Assisted OK — track reps', isBodyweight: true, noProgression: true },
+                { name: 'Lat Pulldown', sets: '3×10-12', start: 70, increment: 5, notes: 'Full stretch at top' },
+                { name: 'Face Pulls', sets: '3×15-20', start: 20, increment: 2.5, notes: 'Rear delts + posture' },
+                { name: 'Barbell Curls', sets: '3×10-12', start: 30, increment: 2.5, notes: 'No swinging' },
+                { name: 'Hammer Curls', sets: '3×12', start: 15, increment: 2.5, notes: 'Forearm development' }
             ],
             legs: [
-                { name: 'Squat', sets: '4×6-8', start: 115, increment: 10, notes: 'King of exercises' },
-                { name: 'Romanian Deadlift', sets: '3×10-12', start: 95, increment: 10, notes: 'Hamstring focus' },
-                { name: 'Leg Press', sets: '3×12-15', start: 180, increment: 20, notes: 'Go deep' },
-                { name: 'Leg Curls', sets: '3×12', start: 60, increment: 5, notes: 'Squeeze at top' },
-                { name: 'Calf Raises', sets: '4×15-20', start: 100, increment: 10, notes: 'Full ROM' },
+                { name: 'Squat', sets: '4×6-8', start: 85, increment: 10, notes: 'Depth over weight' },
+                { name: 'Romanian Deadlift', sets: '3×10-12', start: 75, increment: 10, notes: 'Hamstring focus' },
+                { name: 'Leg Press', sets: '3×12-15', start: 140, increment: 20, notes: 'Go deep' },
+                { name: 'Leg Curls', sets: '3×12', start: 40, increment: 5, notes: 'Squeeze at top' },
+                { name: 'Calf Raises', sets: '4×15-20', start: 70, increment: 10, notes: 'Full ROM' },
                 { name: 'Planks', sets: '3×45sec', start: 45, increment: 5, notes: 'Add 5 sec/week', isTime: true }
             ]
         };
