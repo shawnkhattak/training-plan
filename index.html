@@ -940,8 +940,8 @@
                 <div class="stat-label">Total Weeks</div>
             </div>
             <div class="stat">
-                <div class="stat-value">5+3</div>
-                <div class="stat-label">Lift + MMA Days</div>
+                <div class="stat-value">5+6</div>
+                <div class="stat-label">Lift + Boxing Days</div>
             </div>
         </div>
         <div class="scroll-indicator">
@@ -1033,39 +1033,39 @@
         <section id="mainstreet" class="classes-section">
             <div class="section-header">
                 <h2 class="section-title">Main Street Classes</h2>
-                <p class="section-subtitle">Your MMA training at Main Street Boxing & Muay Thai</p>
+                <p class="section-subtitle">Boxing-focused training at Main Street (No shin pads needed yet!)</p>
             </div>
 
             <div class="class-grid">
                 <div class="class-card">
-                    <h4 class="class-name">Muay Thai All Levels</h4>
-                    <div class="class-schedule">Mon/Tue/Wed/Thu • 6:30-7:30 PM</div>
-                    <p class="class-description">Core striking development. Learn kicks, knees, elbows, and clinch work.</p>
-                </div>
-                <div class="class-card">
-                    <h4 class="class-name">Muay Thai Pads</h4>
-                    <div class="class-schedule">Tue/Thu • 7:30-8:30 PM</div>
-                    <p class="class-description">Technical pad work with partners. Great for timing and combinations.</p>
-                </div>
-                <div class="class-card">
-                    <h4 class="class-name">MMA All Levels</h4>
-                    <div class="class-schedule">Mon/Wed/Fri • 5:00-6:00 PM</div>
-                    <p class="class-description">Learn to combine striking and grappling for a complete fight game.</p>
-                </div>
-                <div class="class-card">
                     <h4 class="class-name">Amateur Boxing</h4>
-                    <div class="class-schedule">Mon/Tue/Wed • 7:30-8:30 PM</div>
-                    <p class="class-description">Hand speed, footwork, head movement. Excellent complement to Muay Thai.</p>
+                    <div class="class-schedule">Mon/Tue/Wed/Thu • 6:30-7:30 PM or 7:30-8:30 PM</div>
+                    <p class="class-description">PRIMARY FOCUS: Hand speed, footwork, head movement. No shin pads required.</p>
                 </div>
                 <div class="class-card">
-                    <h4 class="class-name">Muay Thai Sparring</h4>
-                    <div class="class-schedule">Saturday • 11:00 AM-12:00 PM</div>
-                    <p class="class-description">Apply everything under pressure. Your weekly skill test.</p>
+                    <h4 class="class-name">Boxing Fundamentals</h4>
+                    <div class="class-schedule">Wednesday • 12:00-1:00 PM</div>
+                    <p class="class-description">Perfect for learning proper technique. Great midday class option.</p>
+                </div>
+                <div class="class-card">
+                    <h4 class="class-name">Beginner MMA</h4>
+                    <div class="class-schedule">Mon/Wed/Fri • 5:00-6:00 PM</div>
+                    <p class="class-description">Striking + grappling fundamentals. No shin pads needed for beginner class.</p>
+                </div>
+                <div class="class-card">
+                    <h4 class="class-name">MMA (Saturday)</h4>
+                    <div class="class-schedule">Saturday • 10:00-11:00 AM</div>
+                    <p class="class-description">Weekend MMA session. Good alternative to sparring until you get shin pads.</p>
                 </div>
                 <div class="class-card">
                     <h4 class="class-name">Fight Fit</h4>
-                    <div class="class-schedule">Daily • Various times</div>
-                    <p class="class-description">High-intensity conditioning for extra cardio when needed.</p>
+                    <div class="class-schedule">Mon-Sat • Various times (6am, 9am, 5:30pm)</div>
+                    <p class="class-description">High-intensity conditioning. Use for extra cardio or warm-up.</p>
+                </div>
+                <div class="class-card">
+                    <h4 class="class-name">Muay Thai (When You Get Shin Pads)</h4>
+                    <div class="class-schedule">Mon/Tue/Wed/Thu • 6:30-7:30 PM</div>
+                    <p class="class-description">FUTURE: Add Muay Thai All Levels + Saturday Sparring once you have shin pads.</p>
                 </div>
             </div>
         </section>
@@ -1209,36 +1209,37 @@
         // ============ WEEKLY SCHEDULE GRID ============
         function renderWeekGrid() {
             const days = [
-                { name: 'Monday', dayIndex: 1, focus: 'Push + Muay Thai', activities: [
+                { name: 'Monday', dayIndex: 1, focus: 'Push + Boxing', activities: [
                     { time: '8:00-9:30 AM', name: 'Push Day (Gym)', type: 'gym' },
                     { time: '2:30-4:00 PM', name: 'ACCT 2302', type: 'class' },
                     { time: '5:30-7:00 PM', name: 'SCLT 3384', type: 'class' },
-                    { time: '7:30-8:30 PM', name: 'Muay Thai Pads', type: 'mma' }
+                    { time: '7:30-8:30 PM', name: 'Amateur Boxing', type: 'mma' }
                 ]},
-                { name: 'Tuesday', dayIndex: 2, focus: 'Pull Day', activities: [
+                { name: 'Tuesday', dayIndex: 2, focus: 'Pull Day (Heavy class day)', activities: [
                     { time: '8:00-9:30 AM', name: 'Pull Day (Gym)', type: 'gym' },
                     { time: '2:30-4:00 PM', name: 'TLIM 3340', type: 'class' },
                     { time: '5:30-7:00 PM', name: 'SCLT 3389', type: 'class' },
                     { time: '7:00-8:30 PM', name: 'SCLT 3387', type: 'class' }
                 ]},
-                { name: 'Wednesday', dayIndex: 3, focus: 'Legs + Muay Thai', activities: [
+                { name: 'Wednesday', dayIndex: 3, focus: 'Legs + Boxing', activities: [
                     { time: '8:00-9:30 AM', name: 'Legs Day (Gym)', type: 'gym' },
+                    { time: '12:00-1:00 PM', name: 'Boxing Fundamentals', type: 'mma' },
                     { time: '2:30-4:00 PM', name: 'ACCT 2302', type: 'class' },
-                    { time: '6:30-7:30 PM', name: 'Muay Thai All Levels', type: 'mma' }
+                    { time: '7:30-8:30 PM', name: 'Amateur Boxing', type: 'mma' }
                 ]},
-                { name: 'Thursday', dayIndex: 4, focus: 'Push #2 + Triple MMA', highlight: true, activities: [
+                { name: 'Thursday', dayIndex: 4, focus: 'Push #2 + Triple Combat', highlight: true, activities: [
                     { time: '10:30-12:00 PM', name: 'Push Day #2 (Gym)', type: 'gym' },
-                    { time: '5:00-6:00 PM', name: 'MMA All Levels', type: 'mma' },
-                    { time: '6:30-7:30 PM', name: 'Muay Thai All Levels', type: 'mma' },
-                    { time: '7:30-8:30 PM', name: 'Muay Thai Pads', type: 'mma' }
+                    { time: '5:00-6:00 PM', name: 'Beginner MMA', type: 'mma' },
+                    { time: '6:30-7:30 PM', name: 'Amateur Boxing', type: 'mma' },
+                    { time: '7:30-8:30 PM', name: 'Amateur Sparring (Boxing)', type: 'mma' }
                 ]},
-                { name: 'Friday', dayIndex: 5, focus: 'Pull #2', activities: [
+                { name: 'Friday', dayIndex: 5, focus: 'Pull #2 + MMA', activities: [
                     { time: '8:00-9:30 AM', name: 'Pull Day #2 (Gym)', type: 'gym' },
-                    { time: '5:30-7:00 PM', name: 'SCLT 3385', type: 'class' },
-                    { time: '7:30 PM', name: 'Optional Boxing', type: 'mma' }
+                    { time: '5:00-6:00 PM', name: 'Beginner MMA', type: 'mma' },
+                    { time: '5:30-7:00 PM', name: 'SCLT 3385', type: 'class' }
                 ]},
-                { name: 'Saturday', dayIndex: 6, focus: 'Sparring + Recovery', activities: [
-                    { time: '11:00 AM-12:00 PM', name: 'Muay Thai Sparring', type: 'mma' },
+                { name: 'Saturday', dayIndex: 6, focus: 'MMA + Recovery', activities: [
+                    { time: '10:00-11:00 AM', name: 'MMA or Amateur Boxing', type: 'mma' },
                     { time: 'Afternoon', name: 'Meal Prep + Recovery', type: 'rest' }
                 ]},
                 { name: 'Sunday', dayIndex: 0, focus: 'Full Rest', rest: true, activities: [
@@ -1498,7 +1499,7 @@
         // ============ DAILY BREAKDOWN ============
         function renderDailyBreakdown() {
             const days = [
-                { name: 'Monday', dayIndex: 1, summary: 'Push Day + Muay Thai Pads', blocks: [
+                { name: 'Monday', dayIndex: 1, summary: 'Push Day + Boxing', blocks: [
                     { time: '7:00 AM', activity: 'Wake up, light breakfast (eggs, toast)' },
                     { time: '8:00-9:30 AM', activity: 'GYM: Push Day', highlight: 'gym' },
                     { time: '10:00 AM', activity: 'Post-workout meal (big breakfast at dining hall)' },
@@ -1506,7 +1507,7 @@
                     { time: '2:30-4:00 PM', activity: 'ACCT 2302 Lecture' },
                     { time: '4:00-5:15 PM', activity: 'Meal + Rest' },
                     { time: '5:30-7:00 PM', activity: 'SCLT 3384 Lecture' },
-                    { time: '7:30-8:30 PM', activity: 'Main Street: Muay Thai Pads', highlight: 'mma' },
+                    { time: '7:30-8:30 PM', activity: 'Main Street: Amateur Boxing', highlight: 'mma' },
                     { time: '9:00 PM', activity: 'Dinner (big meal, protein focus)' }
                 ]},
                 { name: 'Tuesday', dayIndex: 2, summary: 'Pull Day (Heavy class day)', blocks: [
@@ -1520,40 +1521,42 @@
                     { time: '7:00-8:30 PM', activity: 'SCLT 3387 Procurement' },
                     { time: '8:45 PM', activity: 'Dinner (you earned it)' }
                 ]},
-                { name: 'Wednesday', dayIndex: 3, summary: 'Legs Day + Muay Thai', blocks: [
+                { name: 'Wednesday', dayIndex: 3, summary: 'Legs Day + Double Boxing', blocks: [
                     { time: '7:00 AM', activity: 'Wake up, breakfast' },
                     { time: '8:00-9:30 AM', activity: 'GYM: Legs Day (Squat, RDL, Leg Press)', highlight: 'gym' },
                     { time: '10:00 AM', activity: 'Post-workout meal' },
-                    { time: '11:00-2:00 PM', activity: 'Study / Rest (legs will be tired)' },
+                    { time: '11:00-12:00 PM', activity: 'Rest before noon class' },
+                    { time: '12:00-1:00 PM', activity: 'Main Street: Boxing Fundamentals', highlight: 'mma' },
+                    { time: '1:00-2:00 PM', activity: 'Lunch' },
                     { time: '2:30-4:00 PM', activity: 'ACCT 2302 Lecture' },
-                    { time: '4:00-6:00 PM', activity: 'Meal + Rest / Optional MMA at 5pm' },
-                    { time: '6:30-7:30 PM', activity: 'Main Street: Muay Thai All Levels', highlight: 'mma' },
-                    { time: '8:00 PM', activity: 'Dinner, foam roll legs' }
+                    { time: '4:00-7:00 PM', activity: 'Study / Rest' },
+                    { time: '7:30-8:30 PM', activity: 'Main Street: Amateur Boxing', highlight: 'mma' },
+                    { time: '9:00 PM', activity: 'Dinner, foam roll legs' }
                 ]},
-                { name: 'Thursday', dayIndex: 4, summary: 'BEST DAY — Push #2 + Triple MMA Session', blocks: [
+                { name: 'Thursday', dayIndex: 4, summary: 'BEST DAY — Push #2 + Triple Combat Session', blocks: [
                     { time: '9:00 AM', activity: 'Sleep in, big breakfast' },
                     { time: '10:30-12:00 PM', activity: 'GYM: Push Day #2', highlight: 'gym' },
                     { time: '12:30 PM', activity: 'Lunch' },
                     { time: '1:00-4:30 PM', activity: 'Study / Projects / Free time' },
-                    { time: '5:00-6:00 PM', activity: 'Main Street: MMA All Levels', highlight: 'mma' },
-                    { time: '6:30-7:30 PM', activity: 'Main Street: Muay Thai All Levels', highlight: 'mma' },
-                    { time: '7:30-8:30 PM', activity: 'Main Street: Muay Thai Pads', highlight: 'mma' },
+                    { time: '5:00-6:00 PM', activity: 'Main Street: Beginner MMA', highlight: 'mma' },
+                    { time: '6:30-7:30 PM', activity: 'Main Street: Amateur Boxing', highlight: 'mma' },
+                    { time: '7:30-8:30 PM', activity: 'Main Street: Amateur Sparring (Boxing)', highlight: 'mma' },
                     { time: '9:00 PM', activity: 'Big dinner (you burned a lot today)' }
                 ]},
-                { name: 'Friday', dayIndex: 5, summary: 'Pull Day #2 + SCLT 3385', blocks: [
+                { name: 'Friday', dayIndex: 5, summary: 'Pull Day #2 + Beginner MMA', blocks: [
                     { time: '7:00 AM', activity: 'Wake up, breakfast' },
                     { time: '8:00-9:30 AM', activity: 'GYM: Pull Day #2', highlight: 'gym' },
                     { time: '10:00 AM', activity: 'Post-workout meal' },
                     { time: '11:00-2:00 PM', activity: 'Study / Internship applications' },
                     { time: '2:00-5:00 PM', activity: 'Free time / Errands' },
+                    { time: '5:00-6:00 PM', activity: 'Main Street: Beginner MMA', highlight: 'mma' },
                     { time: '5:30-7:00 PM', activity: 'SCLT 3385 Transport Econ (Online)' },
-                    { time: '7:30 PM', activity: 'Optional: Amateur Boxing OR rest', highlight: 'mma' }
+                    { time: '7:30 PM', activity: 'Rest OR light study' }
                 ]},
-                { name: 'Saturday', dayIndex: 6, summary: 'Sparring + Recovery', blocks: [
+                { name: 'Saturday', dayIndex: 6, summary: 'MMA/Boxing + Recovery', blocks: [
                     { time: '9:00 AM', activity: 'Wake up, light breakfast' },
-                    { time: '10:30 AM', activity: 'Head to Main Street' },
-                    { time: '11:00-12:00 PM', activity: 'Muay Thai Sparring (apply what you learned)', highlight: 'mma' },
-                    { time: '12:30 PM', activity: 'Lunch' },
+                    { time: '10:00-11:00 AM', activity: 'Main Street: MMA or Amateur Boxing', highlight: 'mma' },
+                    { time: '11:30 AM', activity: 'Lunch' },
                     { time: '1:00-3:00 PM', activity: 'Meal prep for the week' },
                     { time: '3:00-6:00 PM', activity: 'Free time / Social / Gaming' },
                     { time: 'Evening', activity: 'Rest, recover, enjoy yourself' }
